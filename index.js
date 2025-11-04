@@ -43,56 +43,41 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
       `${member.user.tag} joined voice channel: ${newState.channel.name}`,
     );
 
-    const guild = newState.guild;
-    let notificationChannel = null;
-
+    const voiceChannel = newState.channel;
+    
     try {
-      const threads = await guild.channels.fetchActiveThreads();
-      const voiceThread = threads.threads.find(
-        (thread) => thread.parentId === newState.channelId,
-      );
+      const randomMessage =
+        JOIN_MESSAGES[Math.floor(Math.random() * JOIN_MESSAGES.length)];
+      const formattedMessage = randomMessage
+        .replace("{user}", `<@${member.id}>`)
+        .replace("{channel}", voiceChannel.name);
 
-      if (voiceThread) {
-        notificationChannel = voiceThread;
-        console.log(`Found thread for voice channel: ${voiceThread.name}`);
-      }
+      await voiceChannel.send(formattedMessage);
+      console.log(`✅ Notification sent to voice channel: ${voiceChannel.name}`);
     } catch (error) {
-      console.error(`Error fetching threads: ${error.message}`);
-    }
-
-    if (!notificationChannel) {
-      const voiceChannelName = newState.channel.name.toLowerCase();
-      notificationChannel = guild.channels.cache.find(
-        (channel) =>
-          channel.name.toLowerCase() === voiceChannelName &&
-          channel.isTextBased(),
-      );
-    }
-
-    if (!notificationChannel) {
-      notificationChannel = guild.channels.cache.find(
+      console.error(`❌ Failed to send to voice channel chat: ${error.message}`);
+      console.log(`Attempting to send to fallback text channel...`);
+      
+      const guild = newState.guild;
+      const fallbackChannel = guild.channels.cache.find(
         (channel) =>
           channel.name === NOTIFICATION_CHANNEL_NAME && channel.isTextBased(),
       );
-    }
-
-    if (notificationChannel) {
-      try {
-        const randomMessage =
-          JOIN_MESSAGES[Math.floor(Math.random() * JOIN_MESSAGES.length)];
-        const formattedMessage = randomMessage
-          .replace("{user}", `<@${member.id}>`)
-          .replace("{channel}", newState.channel.name);
-
-        await notificationChannel.send(formattedMessage);
-        console.log(`✅ Notification sent to ${notificationChannel.name}`);
-      } catch (error) {
-        console.error(`❌ Failed to send notification: ${error.message}`);
+      
+      if (fallbackChannel) {
+        try {
+          const randomMessage =
+            JOIN_MESSAGES[Math.floor(Math.random() * JOIN_MESSAGES.length)];
+          const formattedMessage = randomMessage
+            .replace("{user}", `<@${member.id}>`)
+            .replace("{channel}", voiceChannel.name);
+          
+          await fallbackChannel.send(formattedMessage);
+          console.log(`✅ Notification sent to fallback: ${fallbackChannel.name}`);
+        } catch (fallbackError) {
+          console.error(`❌ Fallback also failed: ${fallbackError.message}`);
+        }
       }
-    } else {
-      console.warn(
-        `⚠️  No notification channel found for voice channel "${newState.channel.name}"`,
-      );
     }
   }
 });
