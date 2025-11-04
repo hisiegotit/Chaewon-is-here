@@ -49,20 +49,26 @@ Click the "Run" button in Replit, and the bot will start monitoring voice channe
 
 ## Configuration
 
-The bot automatically sends notifications to the text channel matching the voice channel name. For example:
-- Join "General" voice → message in "general" text channel
-- Join "Gaming" voice → message in "gaming" text channel
+The bot sends notifications with smart channel detection:
+1. **First priority**: Thread/chat channel associated with the voice channel
+2. **Second priority**: Text channel matching the voice channel name
+3. **Fallback**: "general" text channel
 
-If no matching text channel is found, it falls back to the "general" channel. You can change the fallback channel by editing the `NOTIFICATION_CHANNEL_NAME` constant in `index.js`.
+For example:
+- Join "General" voice → message in voice channel's thread (if exists) or "general" text channel
+- Join "Gaming" voice → message in voice channel's thread (if exists) or "gaming" text channel
+
+You can change the fallback channel by editing the `NOTIFICATION_CHANNEL_NAME` constant in `index.js`.
 
 ## How It Works
 
 The bot listens for the `voiceStateUpdate` event, which fires whenever a user's voice state changes. When a user joins a voice channel (transitions from no channel to a channel), the bot:
 
-1. Picks a random message from 50+ fun templates
-2. Looks for a text channel with the same name as the voice channel
-3. If found, sends the notification there; otherwise falls back to "general"
-4. Mentions the user in the notification
+1. Picks a random message from the message templates
+2. Searches for a thread/chat channel associated with the voice channel
+3. If no thread, looks for a text channel with the same name
+4. If still not found, falls back to "general" text channel
+5. Mentions the user in the notification and sends the message
 
 ## Troubleshooting
 

@@ -11,58 +11,7 @@ const client = new Client({
 const NOTIFICATION_CHANNEL_NAME = "general";
 const recentJoins = new Map();
 
-const JOIN_MESSAGES = [
-  // "🎉 {user} just slid into **{channel}**! Welcome!",
-  // "🔊 Look who decided to show up! {user} is now in **{channel}**!",
-  // "🎊 {user} has entered the building! Now vibing in **{channel}**!",
-  // "🌟 Everyone say hi to {user} who just joined **{channel}**!",
-  // "🎮 {user} joined **{channel}** - let the party begin!",
-  // "👋 {user} is now chilling in **{channel}**!",
-  // "🚀 Boom! {user} just landed in **{channel}**!",
-  // "🎪 The circus is complete! {user} joined **{channel}**!",
-  // "🎵 {user} walked into **{channel}** like they own the place!",
-  // "⭐ A wild {user} appeared in **{channel}**!",
-  // "🎯 {user} locked in and joined **{channel}**!",
-  // "🔥 Things just got hotter! {user} is in **{channel}**!",
-  // "💫 {user} blessed **{channel}** with their presence!",
-  // "🎈 Pop! {user} just popped into **{channel}**!",
-  // "🌈 {user} brought the good vibes to **{channel}**!",
-  // "🎤 {user} has entered **{channel}** - mic check 1, 2!",
-  // "🏆 Champion {user} joined **{channel}**!",
-  // "👑 Royalty alert! {user} is now in **{channel}**!",
-  // "🎨 {user} just painted themselves into **{channel}**!",
-  // "🌊 Making waves! {user} joined **{channel}**!",
-  // "⚡ {user} struck like lightning into **{channel}**!",
-  // "🎭 The show begins! {user} is in **{channel}**!",
-  // "🌙 {user} graced **{channel}** with their presence!",
-  // "🎺 Trumpet sounds! {user} has arrived at **{channel}**!",
-  // "🍕 Fresh delivery! {user} just joined **{channel}**!",
-  // "🎸 {user} is ready to rock in **{channel}**!",
-  // "🦄 A magical {user} appeared in **{channel}**!",
-  // "🌺 {user} bloomed into **{channel}**!",
-  "🎃 Ô {user} làm gì trong này đấyyyyy????!",
-  // "🏴‍☠️ Ahoy! {user} sailed into **{channel}**!",
-  // "🎀 {user} wrapped themselves into **{channel}**!",
-  // "🌸 {user} just spawned in **{channel}**!",
-  // "💎 Rare sighting! {user} joined **{channel}**!",
-  // "🎆 Fireworks! {user} is now in **{channel}**!",
-  // "🔔 Ding ding! {user} joined **{channel}**!",
-  // "🌟 {user} just unlocked **{channel}**!",
-  // "🎲 {user} rolled into **{channel}**!",
-  // "🍀 Lucky us! {user} joined **{channel}**!",
-  // "🎬 Action! {user} is live in **{channel}**!",
-  // "🌻 {user} brightened up **{channel}**!",
-  // "🎪 Ladies and gentlemen, {user} is in **{channel}**!",
-  // "🚁 {user} just choppered into **{channel}**!",
-  // "🎢 {user} is riding the wave in **{channel}**!",
-  // "🎡 Round and round! {user} joined **{channel}**!",
-  // "🌍 {user} traveled across the world to **{channel}**!",
-  // "🎓 Professor {user} has joined **{channel}**!",
-  // "🔮 The prophecy was true! {user} is in **{channel}**!",
-  // "🌪️ {user} whirlwinded into **{channel}**!",
-  // "🎹 {user} is composing vibes in **{channel}**!",
-  // "🏖️ {user} brought vacation energy to **{channel}**!"
-];
+const JOIN_MESSAGES = ["🎃 Ô {user} làm gì trong ***{channel}*** đấyyyyy????!"];
 
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`✅ Bot is ready! Logged in as ${readyClient.user.tag}`);
@@ -95,13 +44,30 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     );
 
     const guild = newState.guild;
-    const voiceChannelName = newState.channel.name.toLowerCase();
+    let notificationChannel = null;
 
-    let notificationChannel = guild.channels.cache.find(
-      (channel) =>
-        channel.name.toLowerCase() === voiceChannelName &&
-        channel.isTextBased(),
-    );
+    try {
+      const threads = await guild.channels.fetchActiveThreads();
+      const voiceThread = threads.threads.find(
+        (thread) => thread.parentId === newState.channelId,
+      );
+
+      if (voiceThread) {
+        notificationChannel = voiceThread;
+        console.log(`Found thread for voice channel: ${voiceThread.name}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching threads: ${error.message}`);
+    }
+
+    if (!notificationChannel) {
+      const voiceChannelName = newState.channel.name.toLowerCase();
+      notificationChannel = guild.channels.cache.find(
+        (channel) =>
+          channel.name.toLowerCase() === voiceChannelName &&
+          channel.isTextBased(),
+      );
+    }
 
     if (!notificationChannel) {
       notificationChannel = guild.channels.cache.find(
@@ -119,13 +85,13 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
           .replace("{channel}", newState.channel.name);
 
         await notificationChannel.send(formattedMessage);
-        console.log(`✅ Notification sent to #${notificationChannel.name}`);
+        console.log(`✅ Notification sent to ${notificationChannel.name}`);
       } catch (error) {
         console.error(`❌ Failed to send notification: ${error.message}`);
       }
     } else {
       console.warn(
-        `⚠️  No matching text channel found for voice channel "${newState.channel.name}"`,
+        `⚠️  No notification channel found for voice channel "${newState.channel.name}"`,
       );
     }
   }
