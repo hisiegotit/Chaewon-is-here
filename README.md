@@ -49,11 +49,20 @@ Click the "Run" button in Replit, and the bot will start monitoring voice channe
 
 ## Configuration
 
-By default, the bot sends notifications to a channel named `general`. To change this, edit the `NOTIFICATION_CHANNEL_NAME` constant in `index.js`.
+The bot automatically sends notifications to the text channel matching the voice channel name. For example:
+- Join "General" voice → message in "general" text channel
+- Join "Gaming" voice → message in "gaming" text channel
+
+If no matching text channel is found, it falls back to the "general" channel. You can change the fallback channel by editing the `NOTIFICATION_CHANNEL_NAME` constant in `index.js`.
 
 ## How It Works
 
-The bot listens for the `voiceStateUpdate` event, which fires whenever a user's voice state changes. When a user joins a voice channel (transitions from no channel to a channel), the bot sends a message to the designated text channel.
+The bot listens for the `voiceStateUpdate` event, which fires whenever a user's voice state changes. When a user joins a voice channel (transitions from no channel to a channel), the bot:
+
+1. Picks a random message from 50+ fun templates
+2. Looks for a text channel with the same name as the voice channel
+3. If found, sends the notification there; otherwise falls back to "general"
+4. Mentions the user in the notification
 
 ## Troubleshooting
 

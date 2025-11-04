@@ -33,8 +33,11 @@ discord-voice-notifier/
 
 ## Key Features
 - Voice channel join detection using Discord Gateway
-- Automatic notifications to text channel
-- Configurable notification channel name
+- 50+ random fun messages with emojis
+- User mentions/tags in notifications
+- Smart channel matching (sends to text channel matching voice channel name)
+- Fallback to "general" channel if no match found
+- Duplicate message prevention with 3-second cooldown
 - Error handling and console logging
 - Uses environment variables for secure token storage
 

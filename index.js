@@ -91,9 +91,17 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     console.log(`${member.user.tag} joined voice channel: ${newState.channel.name}`);
     
     const guild = newState.guild;
-    const notificationChannel = guild.channels.cache.find(
-      channel => channel.name === NOTIFICATION_CHANNEL_NAME && channel.isTextBased()
+    const voiceChannelName = newState.channel.name.toLowerCase();
+    
+    let notificationChannel = guild.channels.cache.find(
+      channel => channel.name.toLowerCase() === voiceChannelName && channel.isTextBased()
     );
+    
+    if (!notificationChannel) {
+      notificationChannel = guild.channels.cache.find(
+        channel => channel.name === NOTIFICATION_CHANNEL_NAME && channel.isTextBased()
+      );
+    }
     
     if (notificationChannel) {
       try {
@@ -103,12 +111,12 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
           .replace('{channel}', newState.channel.name);
         
         await notificationChannel.send(formattedMessage);
-        console.log(`✅ Notification sent to #${NOTIFICATION_CHANNEL_NAME}`);
+        console.log(`✅ Notification sent to #${notificationChannel.name}`);
       } catch (error) {
         console.error(`❌ Failed to send notification: ${error.message}`);
       }
     } else {
-      console.warn(`⚠️  Notification channel "${NOTIFICATION_CHANNEL_NAME}" not found in ${guild.name}`);
+      console.warn(`⚠️  No matching text channel found for voice channel "${newState.channel.name}"`);
     }
   }
 });
