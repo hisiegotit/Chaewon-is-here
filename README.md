@@ -5,9 +5,12 @@ A Discord bot that automatically sends notification messages to a text channel w
 ## Features
 
 - 🔊 Detects when users join voice channels
+- 🎲 Sends random fun messages from a pool of 50+ creative notifications
+- 👤 Mentions/tags the user who joined
 - 📢 Sends automatic notifications to a designated text channel
 - 🛡️ Built with discord.js v14
 - ⚡ Real-time monitoring using Discord Gateway
+- 🚫 Prevents duplicate notifications with smart cooldown system
 
 ## Setup Instructions
 

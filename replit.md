@@ -10,6 +10,11 @@ A Discord bot built with discord.js that automatically sends notification messag
 - ⏳ Awaiting Discord bot token configuration
 
 ## Recent Changes
+- **2025-11-04**: Random message feature added
+  - Added 50 diverse, fun join messages with emojis
+  - Implemented random message selection
+  - Added user mention/tagging using Discord's @mention format
+  - Fixed duplicate message prevention with cooldown system
 - **2025-11-04**: Initial project setup
   - Created Discord bot with voiceStateUpdate event handling
   - Configured to send notifications to "general" text channel
