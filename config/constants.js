@@ -1,0 +1,26 @@
+module.exports = {
+  NOTIFICATION_CHANNEL_NAME: "general",
+  
+  JOIN_MESSAGES: [
+    "🎃 Ô {user} làm gì trong **{channel}** đấyyyyy????!",
+    "👀 Nè nè {user}, vào **{channel}** làm gì mà bí ẩn vậy?",
+    "✨ Chào mừng {user} đã đột nhập **{channel}** — mission accepted?",
+    "🔥 Báo động! {user} xuất hiện tại **{channel}**!",
+    "🛸 {user} vừa hạ cánh ở **{channel}**, ai mang bánh kẹo?",
+    "🎉 {user} đến rồi — mở confetti cho **{channel}**!",
+    "😎 {user} vào **{channel}** — giờ mới có việc để làm!",
+    "🍀 Chúc mừng {user} đã tìm thấy **{channel}** — treasure hunt tiếp thôi!",
+    "⚡ {user} kích hoạt chế độ support tại **{channel}**!",
+    "🤖 Alo {user}, bạn đang ở **{channel}** — thời gian debug bắt đầu!",
+    "🐱‍👤 {user} stealth mode off — xuất hiện ở **{channel}**!",
+    "🌪️ OMG {user} vừa quét qua **{channel}**, giũa tay đi!",
+    "🥳 {user} đã nhảy vào **{channel}** — party time!",
+    "🎭 {user} vào **{channel}** với trang phục tuyệt vời (ảo tưởng thôi)!",
+    "📣 Attention! {user} joined **{channel}** — xin đặt câu hỏi nào?",
+    "🍩 {user} vào **{channel}** — có đem donut không??",
+    "🧭 {user} đã lạc vào **{channel}** — có ai hướng dẫn không?",
+    "🏄 {user} surf vào **{channel}** — sóng êm hay bão tố?",
+    "💡 Ý tưởng mới: {user} vào **{channel}** — note mọi thứ lại!",
+    "🎈 {user} ghé thăm **{channel}** — ai đi chơi nàoooo?",
+  ],
+};
