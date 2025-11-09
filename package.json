@@ -6,10 +6,15 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["discord", "bot", "voice"],
+  "keywords": [
+    "discord",
+    "bot",
+    "voice"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.14.1"
+    "discord.js": "^14.14.1",
+    "dotenv": "^17.2.3"
   }
 }
