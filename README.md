@@ -27,8 +27,8 @@ A Discord bot that automatically sends notification messages to a text channel w
 
 ### 2. Configure the Bot Token
 
-1. In Replit, go to the "Secrets" panel (lock icon in sidebar)
-2. Add a new secret:
+1. Clone repository
+2. Create .env file and add:
    - Key: `DISCORD_BOT_TOKEN`
    - Value: (paste your bot token here)
 
@@ -44,8 +44,8 @@ A Discord bot that automatically sends notification messages to a text channel w
 5. Select your server and authorize the bot
 
 ### 4. Run the Bot
-
-Click the "Run" button in Replit, and the bot will start monitoring voice channels!
+1. Run `npm install`
+2. Run `node index.js`
 
 ## Configuration
 
