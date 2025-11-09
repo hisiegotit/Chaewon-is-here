@@ -19,7 +19,24 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git pull origin master
-            npm install
+            echo "=== Environment Check ==="
+            echo "Node version: $(node --version)"
+            echo "NPM version: $(npm --version)"
+            echo "PM2 version: $(pm2 --version)"
+            echo "Current directory: $(pwd)"
+            echo "Project path: ${{ secrets.PROJECT_PATH }}"
+            
+            echo "=== Navigating to project ==="
+            cd ${{ secrets.PROJECT_PATH }} || { echo "ERROR: Project path does not exist!"; exit 1; }
+            
+            echo "=== Pulling latest code ==="
+            git pull origin master || { echo "ERROR: Git pull failed!"; exit 1; }
+            
+            echo "=== Installing dependencies ==="
+            npm install || { echo "ERROR: npm install failed!"; exit 1; }
+            
+            echo "=== Restarting bot with PM2 ==="
             pm2 restart chaewon-bot || pm2 start index.js --name chaewon-bot
+            
+            echo "=== Deployment complete ==="
+            pm2 status
