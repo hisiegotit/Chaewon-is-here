@@ -19,8 +19,22 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
-            node -v
-            npm -v
+            # Source environment to load Node.js path
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            # Add common Node.js locations to PATH
+            export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+            export PATH="$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -1)/bin:$PATH" 2>/dev/null || true
+            export PATH="/usr/local/lib/nodejs/bin:$PATH"
+            
+            # Try to find node and npm
+            which node || export PATH="/opt/nodejs/bin:$PATH"
+            
+            echo "Node version: $(node -v)"
+            echo "NPM version: $(npm -v)"
+            echo "PM2 version: $(pm2 -v)"
+            
             cd ${{ secrets.PROJECT_PATH }}
             git pull origin master
             npm install
