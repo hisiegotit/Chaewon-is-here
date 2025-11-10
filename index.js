@@ -27,7 +27,8 @@ client.on(Events.VoiceStateUpdate, handleVoiceStateUpdate);
 client.on(Events.InteractionCreate, handleInteraction);
 
 client.on(Events.Error, (error) => {
-  console.error("❌ Discord client error:", error);
+	console.log('test');
+	console.error("❌ Discord client error:", error);
 });
 
 const DISCORD_TOKEN = process.env.DISCORD_BOT_TOKEN;
