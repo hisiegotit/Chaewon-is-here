@@ -3,12 +3,16 @@ const { Client, GatewayIntentBits, Events } = require("discord.js");
 const { registerCommands } = require('./commands/registerCommands');
 const { handleVoiceStateUpdate } = require('./handlers/voiceStateHandler');
 const { handleInteraction } = require('./handlers/interactionHandler');
+const { handlePresenceUpdate } = require('./handlers/presenceHandler');
+const { setupScheduledMessages } = require('./handlers/scheduledMessageHandler');
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildMembers,
   ],
 });
 
@@ -20,9 +24,14 @@ client.once(Events.ClientReady, async (readyClient) => {
 
   // Register slash commands
   await registerCommands(readyClient);
+
+  // Setup scheduled good morning and good night messages
+  setupScheduledMessages(readyClient);
 });
 
 client.on(Events.VoiceStateUpdate, handleVoiceStateUpdate);
+
+client.on(Events.PresenceUpdate, handlePresenceUpdate);
 
 client.on(Events.InteractionCreate, handleInteraction);
 
